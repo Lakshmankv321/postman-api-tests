@@ -35,4 +35,4 @@ jobs:
           ls "${{ github.workspace }}/Ishraff_QA_postman_environment.json"
 
       - name: Run Postman collection
-        run: newman run "${{ github.workspace }}/Ishraff_V2_postman_collection.json" -e "${{ github.workspace }}/Ishraff_QA_postman_environment.json" -r htmlextra  --reporter-htmlextra-export newman-report.html --verbose
+        run: newman run Ishraff_V2_postman_collection.json -e Ishraff_QA_postman_environment.json -r htmlextra  --reporter-htmlextra-export newman-report.html --verbose
