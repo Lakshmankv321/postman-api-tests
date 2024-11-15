@@ -38,10 +38,10 @@ jobs:
       # Step 6: Verify specific file paths
       - name: Verify specific file paths
         run: |
-          ls "${{ github.workspace }}/Ishraff_V2_postman_collection.json"
-          ls "${{ github.workspace }}/Ishraff_QA_postman_environment.json"
+          ls Ishraff_V2_postman_collection.json
+          ls Ishraff_QA_postman_environment.json
 
       # Step 7: Run the Postman collection
       - name: Run Postman collection
         run: |
-          newman run Ishraff_V2_postman_collection.json -e Ishraff_QA_postman_environment.json -r htmlextra --reporter-htmlextra-export newman-report.html --verbose
+          newman run Ishraff_V2_postman_collection.json -e Ishraff_QA_postman_environment.json
