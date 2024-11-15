@@ -1,38 +1,51 @@
 name: Postman Collection Test
 
-on: [push]
+on:
+  push:  # Trigger the workflow on every push to any branch
+    branches:
+      - main  # Specify branches if needed (e.g., main)
 
 jobs:
   postman-tests:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # Step 3: Install Newman
       - name: Install Newman
         run: npm install -g newman
 
-        # Install the Newman htmlextra reporter
+      # Step 4: Install the Newman htmlextra reporter
       - name: Install htmlextra Reporter
         run: npm install -g newman-reporter-htmlextra
         
-      # Debug: Print Node.js, NPM version and check global packages
+      # Step 5: Debug Node.js and NPM environment
       - name: Debug Node Environment
         run: |
           node -v
           npm -v
           npm list -g --depth=0  # List globally installed packages to confirm newman and reporter
 
+      # Step 6: Verify specific file paths
       - name: Verify specific file paths
         run: |
           ls "${{ github.workspace }}/Ishraff_V2_postman_collection.json"
           ls "${{ github.workspace }}/Ishraff_QA_postman_environment.json"
 
+      # Step 7: Run the Postman collection
       - name: Run Postman collection
-        run: newman run Ishraff_V2_postman_collection.json -e Ishraff_QA_postman_environment.json -r htmlextra  --reporter-htmlextra-export newman-report.html --verbose
+        run: |
+          newman run "${{ github.workspace }}/Ishraff_V2_postman_collection.json" \
+            -e "${{ github.workspace }}/Ishraff_QA_postman_environment.json" \
+            -r htmlextra \
+            --reporter-htmlextra-export "${{ github.workspace }}/newman-report.html" \
+            --verbose
