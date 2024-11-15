@@ -44,4 +44,4 @@ jobs:
       # Step 7: Run the Postman collection
       - name: Run Postman collection
         run: |
-          newman run "${{ github.workspace }}/Ishraff_V2_postman_collection.json" -e "${{ github.workspace }}/Ishraff_QA_postman_environment.json" -r htmlextra --reporter-htmlextra-export "${{ github.workspace }}/newman-report.html" --verbose
+          newman run Ishraff_V2_postman_collection.json -e Ishraff_QA_postman_environment.json -r htmlextra --reporter-htmlextra-export newman-report.html --verbose
