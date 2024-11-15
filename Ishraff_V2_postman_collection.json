@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "d758c403-47b0-4f2f-975f-68b6c08cb44b",
+		"name": "Ishraff_V2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "7887196",
+		"_collection_link": "https://universal-astronaut-288212.postman.co/workspace/My-Workspace~c0f21f93-d1a0-4c12-8560-cad2e8b42e42/collection/7887196-d758c403-47b0-4f2f-975f-68b6c08cb44b?action=share&source=collection_link&creator=7887196"
+	},
+	"item": [
+		{
+			"name": "SignupUser",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.set('randomNumer_MobileNum',_.random(10000000, 99999999));\r",
+							"\r",
+							"function randomString(length=1) {\r",
+							"        let randomString = \"\";\r",
+							"        for (let i = 0; i < length; i++){\r",
+							"            randomString += pm.variables.replaceIn(\"{{$randomAlphaNumeric}}\");\r",
+							"        }\r",
+							"        return randomString;\r",
+							"    }\r",
+							"    \r",
+							"    STRING_LEN = 8\r",
+							"    pm.variables.set('randomString', randomString(STRING_LEN));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set('emailid', jsonData.data.email);\r",
+							"pm.environment.set('username', jsonData.data.username);\r",
+							"pm.environment.set('phoneNumber', jsonData.data.phoneNumber);\r",
+							"pm.environment.set('password', jsonData.data.password);\r",
+							"pm.environment.set('token', jsonData.token);\r",
+							"pm.environment.set('otp', jsonData.createdOtp.otp);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"data\": {\r",
+							"      \"type\": \"object\",\r",
+							"      \"properties\": {\r",
+							"        \"user\": {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"id\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"username\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"createdAt\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"password\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"phoneNumber\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"email\": {\r",
+							"              \"type\": \"string\"\r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"id\",\r",
+							"            \"username\",\r",
+							"            \"createdAt\",\r",
+							"            \"password\",\r",
+							"            \"phoneNumber\",\r",
+							"            \"email\"\r",
+							"          ]\r",
+							"        },\r",
+							"        \"token\": {\r",
+							"          \"type\": \"string\"\r",
+							"        }\r",
+							"      },\r",
+							"      \"required\": [\r",
+							"        \"user\",\r",
+							"        \"token\"\r",
+							"      ]\r",
+							"    }\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"{{randomString}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"Happy@2023\",\r\n  \"phoneNumber\": \"{{randomNumer_MobileNum}}\"\r\n}\r\n\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://ishraffapi.com/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "User_Verification",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"otp\": {{otp}},\r\n    \"data\": {\r\n        \"username\": \"{{username}}\",\r\n        \"email\": \"{{emailid}}\",\r\n        \"password\": \"{{password}}\",\r\n        \"phoneNumber\": \"{{phoneNumber}}\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://ishraffapi.com/signup/verify"
+			},
+			"response": []
+		},
+		{
+			"name": "Signin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set('Login_token',jsonData.token);\r",
+							"pm.environment.set('Login_otp',jsonData.createdOtp.otp);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"mobile\":\"{{phoneNumber}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://ishraffapi.com/signin/phone_number"
+			},
+			"response": []
+		},
+		{
+			"name": "Login_verifyOtp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set('Verified_token',jsonData.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"{{Login_token}}\",\r\n    \"otp\": {{Login_otp}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://ishraffapi.com/verifyOtp"
+			},
+			"response": []
+		},
+		{
+			"name": "Create_Project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": " application/json, text/plain, */*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": " gzip, deflate, br, zstd",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Language",
+						"value": " en-IN,en-US;q=0.9,en;q=0.8,te;q=0.7",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": " Bearer {{Verified_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": " keep-alive",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"CaseMax2\",\r\n    \"type\": \"team\",\r\n    \"latitude\": 23.6713723,\r\n    \"longitude\": 58.0583774,\r\n    \"startDate\": \"2024-10-25T00:00:00.000Z\",\r\n    \"startTime\": \"12:56\",\r\n    \"endDate\": \"2024-10-30T00:00:00.000Z\",\r\n    \"endTime\": \"13:54\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://ishraffapi.com/api/project"
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve_projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": " Bearer {{Verified_token}}",
+						"type": "text"
+					}
+				],
+				"url": "https://ishraffapi.com/api/projects"
+			},
+			"response": []
+		}
+	]
+}
