@@ -18,13 +18,5 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
 
-      - name: Verify specific file paths
-        run: |
-          ls "./ProjectEye/Ishraff_Phase/APIAutomationCollections/ReportsCollections/Ishraff_V2_postman_collection.json"
-          ls "./ProjectEye/Ishraff_Phase/APIAutomationCollections/ReportsCollections/Ishraff_QA_postman_environment.json"
-
-      - name: Set file permissions (if required)
-        run: chmod +r "./ProjectEye/Ishraff_Phase/APIAutomationCollections/ReportsCollections/Ishraff_V2_postman_collection.json" "./ProjectEye/Ishraff_Phase/APIAutomationCollections/ReportsCollections/Ishraff_QA_postman_environment.json"
-
       - name: Run Postman collection
         run: newman run "./ProjectEye/Ishraff_Phase/APIAutomationCollections/ReportsCollections/Ishraff_V2_postman_collection.json" -e "./ProjectEye/Ishraff_Phase/APIAutomationCollections/ReportsCollections/Ishraff_QA_postman_environment.json" -r htmlextra
